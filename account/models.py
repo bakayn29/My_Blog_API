@@ -10,7 +10,7 @@ class MyUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email)  # user = User(username=username, email=email) -> user.save()
         user.set_password(password)
-        # user.create_activation_code()
+        user.create_activation_code()
         user.save(using=self._db)
         return user
 
@@ -39,4 +39,17 @@ class MyUser(AbstractUser):
     def __str__(self):
         return self.email
 
-#TODO: создание активационного кода
+    def create_activation_code(self):
+        """шифрования
+         1. hashlib.md5(self.email + str(self.id)).encode() -> hexdigets()
+         2. get_random_string(50, allowed_char=[abcABC123])
+         3. UUID
+         4. datetime.datetime.now() or time.time() + timestamp() 01.01.1970
+        """
+        import hashlib
+        string = self.email + str(self.id)
+        encode_string = string.encode()
+        md5_object = hashlib.md5(encode_string)
+        activation_code = md5_object.hexdigest()
+        self.activation_code = activation_code
+
