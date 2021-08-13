@@ -17,7 +17,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, validated_data):     # def validate = def clean, validated_data = cleaned_data
         # {"password": "helloworld", "password_confirm": "helloworld", "email": "test@test.com"}
-        print(validated_data)
         password = validated_data.get('password')
         password_confirm = validated_data.get('password_confirm')
         if password != password_confirm:
